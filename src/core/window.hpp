@@ -13,6 +13,11 @@ class Window {
   virtual void swapBuffers() = 0;
   virtual double time() = 0;
 
+  virtual bool isShouldClose() const = 0;
+  virtual void setShouldClose(bool flag) = 0;
+
+  virtual void* nativeHandle() const = 0;
+
   static std::unique_ptr<Window> initialize(DisplaySettings* settings, std::string title);
 
  protected:

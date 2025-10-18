@@ -7,9 +7,11 @@
 #include "time.hpp"
 
 class Window;
+class Input;
 
 class Engine {
   std::unique_ptr<Window> window;
+  std::unique_ptr<Input> input;
   Time time;
   EngineSettings settings;
 
@@ -20,10 +22,16 @@ class Engine {
   static Engine& getInstance();
 
   Time& getTime();
-
+  Window& getWindow();
+  Input& getInput();
   EngineSettings& getSettings();
 
   void initialize();
   void run();
   static void terminate();
+
+  void update();
+  void renderFrame();
+  void postUpdate();
+  void nextFrame();
 };

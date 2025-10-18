@@ -7,6 +7,7 @@
 
 int main() {
   auto& engine = Engine::getInstance();
+
   try {
     engine.initialize();
     engine.run();

@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.3)
-project(olg)
+cmake_minimum_required(VERSION 3.30)
+project(ogl)
 
 cmake_policy(SET CMP0072 NEW)
 
@@ -11,9 +11,9 @@ find_package(glfw3 REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
 add_subdirectory(src)
-add_executable(olg src/main.cpp)
+add_executable(ogl src/main.cpp)
 
-target_link_libraries(olg PRIVATE
+target_link_libraries(ogl PRIVATE
   glad
   glfw
   OpenGL::GL

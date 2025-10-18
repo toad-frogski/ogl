@@ -1,21 +1,35 @@
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
 #include "../window.hpp"
+#include "_glfw.hpp"
 
 class GLFWWindow : public Window {
   GLFWwindow* window;
+  GLFWWindowContext ctx;
 
  public:
   GLFWWindow(GLFWwindow* window, int width, int height);
   ~GLFWWindow();
   double time() override;
   void swapBuffers() override;
+  bool isShouldClose() const override;
+  void setShouldClose(bool flag) override;
+  void* nativeHandle() const override;
+
+  GLFWWindowContext* context();
 };
 
-GLFWWindow::GLFWWindow(GLFWwindow* window, int width, int height) : Window({width, height}), window(window) {}
+GLFWWindow::GLFWWindow(GLFWwindow* window, int width, int height) : Window({width, height}), window(window) {
+  ctx.window = this;
+  glfwSetWindowUserPointer(window, &ctx);
+}
+
 GLFWWindow::~GLFWWindow() { glfwTerminate(); }
 
 double GLFWWindow::time() { return glfwGetTime(); }
+
+GLFWWindowContext* GLFWWindow::context() { return &ctx; }
 
 std::unique_ptr<Window> Window::initialize(DisplaySettings* settings, std::string title) {
   int width = settings->width;
@@ -35,6 +49,11 @@ std::unique_ptr<Window> Window::initialize(DisplaySettings* settings, std::strin
   }
 
   glfwMakeContextCurrent(window);
+
+  if (!gladLoadGL(glfwGetProcAddress)) {
+    return nullptr;
+  }
+
   glViewport(0, 0, width, height);
   glClearColor(0.0f, 0.0f, 0.0f, 1);
   glEnable(GL_BLEND);
@@ -45,9 +64,14 @@ std::unique_ptr<Window> Window::initialize(DisplaySettings* settings, std::strin
   glfwGetMonitorContentScale(glfwGetPrimaryMonitor(), &scale.x, &scale.y);
 
   auto windowPtr = std::make_unique<GLFWWindow>(window, width, height);
-  glfwSetWindowUserPointer(window, windowPtr.get());
 
   return std::move(windowPtr);
 }
 
 void GLFWWindow::swapBuffers() { glfwSwapBuffers(window); }
+
+bool GLFWWindow::isShouldClose() const { return glfwWindowShouldClose(window); }
+
+void GLFWWindow::setShouldClose(bool flag) { glfwSetWindowShouldClose(window, flag); }
+
+void* GLFWWindow::nativeHandle() const { return static_cast<void*>(window); }
