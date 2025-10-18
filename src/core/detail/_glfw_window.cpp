@@ -1,24 +1,7 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
-#include "../window.hpp"
-#include "_glfw.hpp"
-
-class GLFWWindow : public Window {
-  GLFWwindow* window;
-  GLFWWindowContext ctx;
-
- public:
-  GLFWWindow(GLFWwindow* window, int width, int height);
-  ~GLFWWindow();
-  double time() override;
-  void swapBuffers() override;
-  bool isShouldClose() const override;
-  void setShouldClose(bool flag) override;
-  void* nativeHandle() const override;
-
-  GLFWWindowContext* context();
-};
+#include "_glfw_window.hpp"
 
 GLFWWindow::GLFWWindow(GLFWwindow* window, int width, int height) : Window({width, height}), window(window) {
   ctx.window = this;
@@ -75,3 +58,5 @@ bool GLFWWindow::isShouldClose() const { return glfwWindowShouldClose(window); }
 void GLFWWindow::setShouldClose(bool flag) { glfwSetWindowShouldClose(window, flag); }
 
 void* GLFWWindow::nativeHandle() const { return static_cast<void*>(window); }
+
+void GLFWWindow::setSize(int width, int height) { glViewport(0, 0, width, height); }

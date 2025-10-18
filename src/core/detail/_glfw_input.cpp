@@ -8,7 +8,7 @@
 
 #include "../input.hpp"
 #include "../engine.hpp"
-#include "_glfw.hpp"
+#include "_glfw_window.hpp"
 
 inline constexpr short KEYS_BUFFER_SIZE = 1036;
 inline constexpr short MOUSE_KEYS_OFFSET = 1024;
@@ -35,6 +35,8 @@ class GLFWInput : public Input {
 
   void onKeyCallback(int key, bool pressed);
   void onMouseCallback(int key, bool pressed);
+
+  void addHandler(int key, std::function<void()> handler) override;
 };
 
 void GLFWInput::pollEvents() {
@@ -83,9 +85,29 @@ static void key_callback(GLFWwindow* window, int key, int /* scancode */, int ac
   switch (action) {
     case GLFW_REPEAT:
     case GLFW_PRESS:
+      input->onKeyCallback(key, true);
       break;
     case GLFW_RELEASE:
+      input->onKeyCallback(key, false);
       break;
+  }
+}
+
+static void mouse_button_callback(GLFWwindow* window, int button, int action, int) {
+  auto* context = static_cast<GLFWWindowContext*>(glfwGetWindowUserPointer(window));
+  auto input = context->input;
+  if (input == nullptr) return;
+
+  input->onMouseCallback(button, action == GLFW_PRESS);
+}
+
+static void window_size_callback(GLFWwindow* handle, int width, int height) {
+  auto* context = static_cast<GLFWWindowContext*>(glfwGetWindowUserPointer(handle));
+  auto window = context->window;
+  if (window == nullptr) return;
+
+  if (width && height) {
+    window->setSize(width, height);
   }
 }
 
@@ -97,6 +119,8 @@ std::unique_ptr<Input> Input::initialize(Window* window) {
   context->input = inputPtr.get();
 
   glfwSetKeyCallback(handle, key_callback);
+  glfwSetMouseButtonCallback(handle, mouse_button_callback);
+  glfwSetWindowSizeCallback(handle, window_size_callback);
 
   return std::move(inputPtr);
 }
@@ -115,3 +139,9 @@ void GLFWInput::onKeyCallback(int key, bool pressed) {
 }
 
 void GLFWInput::onMouseCallback(int key, bool pressed) { onKeyCallback(key + MOUSE_KEYS_OFFSET, pressed); }
+
+void GLFWInput::addHandler(int key, std::function<void()> handler) {
+  if (key < 0 || key >= KEYS_BUFFER_SIZE) return;
+
+  keyHandlers.try_emplace(key, handler);
+}

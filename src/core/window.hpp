@@ -15,6 +15,7 @@ class Window {
 
   virtual bool isShouldClose() const = 0;
   virtual void setShouldClose(bool flag) = 0;
+  virtual void setSize(int width, int height) = 0;
 
   virtual void* nativeHandle() const = 0;
 

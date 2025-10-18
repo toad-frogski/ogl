@@ -26,4 +26,6 @@ class Input {
   virtual void toggleCursor() = 0;
 
   virtual CursorState getCursor() const = 0;
+
+  virtual void addHandler(int key, std::function<void()> handler) = 0;
 };
