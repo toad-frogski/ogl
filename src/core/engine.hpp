@@ -5,9 +5,8 @@
 
 #include "settings.hpp"
 #include "time.hpp"
-
-class Window;
-class Input;
+#include "input.hpp"
+#include "window.hpp"
 
 class Engine {
   std::unique_ptr<Window> window;
