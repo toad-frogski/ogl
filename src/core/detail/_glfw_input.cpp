@@ -6,39 +6,9 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
-#include "../input.hpp"
 #include "../engine.hpp"
 #include "_glfw_window.hpp"
-
-inline constexpr short KEYS_BUFFER_SIZE = 1036;
-inline constexpr short MOUSE_KEYS_OFFSET = 1024;
-
-class GLFWInput : public Input {
-  GLFWwindow* window;
-  CursorState cursor;
-
- public:
-  GLFWInput(GLFWwindow* window) : window(window) {}
-
-  uint32_t currentFrame = 0;
-  uint frames[KEYS_BUFFER_SIZE]{};
-  bool keys[KEYS_BUFFER_SIZE]{};
-  std::unordered_map<int, std::function<void()>> keyHandlers;
-
-  void pollEvents() override;
-  bool pressed(int keycode) const override;
-  bool jpressed(int keycode) const override;
-  bool clicked(int mousecode) const override;
-  bool jclicked(int mousecode) const override;
-  CursorState getCursor() const override;
-  void setCursor(CursorState cursor) override;
-  void toggleCursor() override;
-
-  void onKeyCallback(int key, bool pressed);
-  void onMouseCallback(int key, bool pressed);
-
-  void addHandler(int key, std::function<void()> handler) override;
-};
+#include "_glfw_input.hpp"
 
 void GLFWInput::pollEvents() {
   currentFrame++;
@@ -117,8 +87,10 @@ static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos) {
   if (input == nullptr) return;
 
   auto cursor = input->getCursor();
-  cursor.pos.x = xpos;
-  cursor.pos.y = ypos;
+  cursor.delta = {xpos - cursor.pos.x, ypos - cursor.pos.y};
+  cursor.pos = {xpos, ypos};
+  input->setCursor(cursor);
+  input->onMouseMoveCallback();
 }
 
 std::unique_ptr<Input> Input::initialize(Window* window) {
@@ -150,6 +122,12 @@ void GLFWInput::onKeyCallback(int key, bool pressed) {
 }
 
 void GLFWInput::onMouseCallback(int key, bool pressed) { onKeyCallback(key + MOUSE_KEYS_OFFSET, pressed); }
+
+void GLFWInput::onMouseMoveCallback() {
+  auto cursor = this->getCursor();
+  const auto& handler = keyHandlers.find(GLFW_MOUSE_MOVE);
+  if (handler != keyHandlers.end()) handler->second();
+}
 
 void GLFWInput::addHandler(int key, std::function<void()> handler) {
   if (key < 0 || key >= KEYS_BUFFER_SIZE) return;

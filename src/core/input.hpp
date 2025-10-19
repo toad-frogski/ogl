@@ -6,7 +6,8 @@
 
 struct CursorState {
   bool locked = false;
-  glm::vec2 pos{};
+  glm::vec2 pos{0.0f, 0.0f};
+  glm::vec2 delta{0.0f, 0.0f};
 };
 
 class Input {
