@@ -7,7 +7,6 @@
 struct CursorState {
   bool locked = false;
   glm::vec2 pos{};
-  glm::vec2 delta{};
 };
 
 class Input {
@@ -26,6 +25,7 @@ class Input {
   virtual void toggleCursor() = 0;
 
   virtual CursorState getCursor() const = 0;
+  virtual void setCursor(CursorState cursor) = 0;
 
   virtual void addHandler(int key, std::function<void()> handler) = 0;
 };

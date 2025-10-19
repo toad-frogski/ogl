@@ -31,6 +31,7 @@ class GLFWInput : public Input {
   bool clicked(int mousecode) const override;
   bool jclicked(int mousecode) const override;
   CursorState getCursor() const override;
+  void setCursor(CursorState cursor) override;
   void toggleCursor() override;
 
   void onKeyCallback(int key, bool pressed);
@@ -40,7 +41,6 @@ class GLFWInput : public Input {
 };
 
 void GLFWInput::pollEvents() {
-  cursor.delta = {0, 0};
   currentFrame++;
   glfwPollEvents();
 }
@@ -111,6 +111,16 @@ static void window_size_callback(GLFWwindow* handle, int width, int height) {
   }
 }
 
+static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos) {
+  auto* context = static_cast<GLFWWindowContext*>(glfwGetWindowUserPointer(window));
+  auto input = context->input;
+  if (input == nullptr) return;
+
+  auto cursor = input->getCursor();
+  cursor.pos.x = xpos;
+  cursor.pos.y = ypos;
+}
+
 std::unique_ptr<Input> Input::initialize(Window* window) {
   auto handle = static_cast<GLFWwindow*>(window->nativeHandle());
   auto inputPtr = std::make_unique<GLFWInput>(handle);
@@ -121,6 +131,7 @@ std::unique_ptr<Input> Input::initialize(Window* window) {
   glfwSetKeyCallback(handle, key_callback);
   glfwSetMouseButtonCallback(handle, mouse_button_callback);
   glfwSetWindowSizeCallback(handle, window_size_callback);
+  glfwSetCursorPosCallback(handle, cursor_pos_callback);
 
   return std::move(inputPtr);
 }
@@ -145,3 +156,5 @@ void GLFWInput::addHandler(int key, std::function<void()> handler) {
 
   keyHandlers.try_emplace(key, handler);
 }
+
+void GLFWInput::setCursor(CursorState cursor) { this->cursor = cursor; }
