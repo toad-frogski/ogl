@@ -24,6 +24,4 @@ void MainScreen::draw(double delta) {
   for (const auto& model : models) {
     model->draw(viewProj);
   }
-  fprintf(stderr, "[camera] position (%f, %f, %f)\n", camera->position.x, camera->position.y, camera->position.z);
-  fprintf(stderr, "[camera] yaw %f pitch %f\n", camera->yaw, camera->pitch);
 }

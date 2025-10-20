@@ -109,16 +109,13 @@ std::unique_ptr<Input> Input::initialize(Window* window) {
 }
 
 void GLFWInput::onKeyCallback(int key, bool pressed) {
-  bool isPrev = keys[key];
   keys[key] = pressed;
   frames[key] = currentFrame;
 
   if (!pressed) return;
 
-  if (!isPrev) {
-    const auto& handler = keyHandlers.find(key);
-    if (handler != keyHandlers.end()) handler->second();
-  }
+  const auto& handler = keyHandlers.find(key);
+  if (handler != keyHandlers.end()) handler->second();
 }
 
 void GLFWInput::onMouseCallback(int key, bool pressed) { onKeyCallback(key + MOUSE_KEYS_OFFSET, pressed); }

@@ -44,7 +44,6 @@ void Engine::initialize() {
   this->input = std::move(input);
 }
 
-
 void Engine::run() {
   auto& window = this->getWindow();
   auto& time = this->getTime();

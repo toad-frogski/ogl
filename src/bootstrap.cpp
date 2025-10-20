@@ -12,6 +12,11 @@ static void register_handlers(Engine* engine) {
     window.setShouldClose(true);
   });
 
+  input.addHandler(GLFW_KEY_GRAVE_ACCENT, []() {
+    auto &input = Engine::getInstance().getInput();
+    input.toggleCursor();
+  });
+
   input.addHandler(GLFW_KEY_W, []() {
     auto camera = Engine::getInstance().getCamera();
     if (!camera) return;
