@@ -4,7 +4,9 @@
 #include <iostream>
 
 #include "core/engine.hpp"
+
 #include "bootstrap.cpp"
+#include "sandbox.cpp"
 
 int main() {
   auto& engine = Engine::getInstance();
@@ -12,7 +14,8 @@ int main() {
   try {
     engine.initialize();
 
-    bootstrap(&engine);
+    bootstrap();
+    sandbox();
 
     engine.run();
   } catch (const std::exception& err) {

@@ -35,7 +35,11 @@ class Shader {
     glDeleteShader(fs);
   }
 
-  GLuint& getProgram() { return program; }
+  ~Shader() {
+    if (program) glDeleteProgram(program);
+  }
+
+  GLuint getProgram() { return program; }
 
   void use() const { glUseProgram(program); }
 };

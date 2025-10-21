@@ -76,9 +76,9 @@ static void window_size_callback(GLFWwindow* handle, int width, int height) {
   auto window = context->window;
   if (window == nullptr) return;
 
-  if (width && height) {
-    window->setSize(width, height);
-  }
+  auto& settings = Engine::getInstance().getSettings();
+  settings.display.width = width;
+  settings.display.height = height;
 }
 
 static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos) {

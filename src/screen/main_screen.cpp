@@ -1,18 +1,5 @@
 #include <glad/gl.h>
-
-#include <iostream>
-#include <vector>
-#include <memory>
-#include "core/screen.hpp"
-#include "core/model.hpp"
-#include "core/engine.hpp"
-
-class MainScreen : public Screen {
- public:
-  std::vector<std::shared_ptr<Model>> models;
-  void update(double delta) override;
-  void draw(double delta) override;
-};
+#include "main_screen.hpp"
 
 void MainScreen::update(double delta) {}
 
