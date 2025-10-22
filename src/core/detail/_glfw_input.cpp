@@ -74,11 +74,14 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
 static void window_size_callback(GLFWwindow* handle, int width, int height) {
   auto* context = static_cast<GLFWWindowContext*>(glfwGetWindowUserPointer(handle));
   auto window = context->window;
-  if (window == nullptr) return;
+  auto input = context->input;
+  if (window == nullptr || input == nullptr) return;
 
   auto& settings = Engine::getInstance().getSettings();
   settings.display.width = width;
   settings.display.height = height;
+  window->setSize(width, height);
+  input->onWindowResizeCallback();
 }
 
 static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos) {
@@ -123,6 +126,11 @@ void GLFWInput::onMouseCallback(int key, bool pressed) { onKeyCallback(key + MOU
 void GLFWInput::onMouseMoveCallback() {
   auto cursor = this->getCursor();
   const auto& handler = keyHandlers.find(GLFW_MOUSE_MOVE);
+  if (handler != keyHandlers.end()) handler->second();
+}
+
+void GLFWInput::onWindowResizeCallback() {
+  const auto& handler = keyHandlers.find(GLFW_WINDOW_RESIZE);
   if (handler != keyHandlers.end()) handler->second();
 }
 

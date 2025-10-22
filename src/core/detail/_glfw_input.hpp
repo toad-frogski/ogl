@@ -2,13 +2,12 @@
 
 #include "../input.hpp"
 
-
-#ifndef GLFW_MOUSE_MOVE
-#define GLFW_MOUSE_MOVE 10
-#endif
-
-inline constexpr short KEYS_BUFFER_SIZE = 1036;
+inline constexpr short KEYS_BUFFER_SIZE = 1048;
 inline constexpr short MOUSE_KEYS_OFFSET = 1024;
+inline constexpr short SPECIAL_EVENTS_OFFSET = MOUSE_KEYS_OFFSET + 12;
+
+inline constexpr short GLFW_MOUSE_MOVE = SPECIAL_EVENTS_OFFSET + 1;
+inline constexpr short GLFW_WINDOW_RESIZE = SPECIAL_EVENTS_OFFSET + 2;
 
 class GLFWInput : public Input {
   GLFWwindow* window;
@@ -34,6 +33,7 @@ class GLFWInput : public Input {
   void onKeyCallback(int key, bool pressed);
   void onMouseCallback(int key, bool pressed);
   void onMouseMoveCallback();
+  void onWindowResizeCallback();
 
   void addHandler(int key, std::function<void()> handler) override;
 };

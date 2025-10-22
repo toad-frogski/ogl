@@ -58,6 +58,12 @@ static void register_handlers(Engine* engine) {
     if (!camera) return;
     camera->rotate(cursor.delta.x, cursor.delta.y);
   });
+
+  input.addHandler(GLFW_WINDOW_RESIZE, []() {
+    auto& window = Engine::getInstance().getWindow();
+    auto& settings = Engine::getInstance().getSettings().display;
+    window.setSize(settings.width, settings.height);
+  });
 }
 
 static void set_screen(Engine* engine) {
