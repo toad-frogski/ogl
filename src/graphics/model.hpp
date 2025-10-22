@@ -18,8 +18,7 @@ class Model {
   void draw(const glm::mat4& viewProj) const {
     shader->use();
     glm::mat4 mvp = viewProj * transform;
-    GLuint loc = glGetUniformLocation(shader->getProgram(), "mvp");
-    glUniformMatrix4fv(loc, 1, GL_FALSE, &mvp[0][0]);
+    shader->setUniform("mvp", mvp);
     mesh->draw();
   }
 };
