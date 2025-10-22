@@ -63,6 +63,11 @@ static void register_handlers(Engine* engine) {
     auto& window = Engine::getInstance().getWindow();
     auto& settings = Engine::getInstance().getSettings().display;
     window.setSize(settings.width, settings.height);
+
+    auto camera = Engine::getInstance().getCamera();
+    if (!camera) return;
+
+    camera->aspect = (float) settings.width / settings.height;
   });
 }
 
