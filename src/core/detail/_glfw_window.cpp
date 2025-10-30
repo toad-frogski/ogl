@@ -60,3 +60,7 @@ void GLFWWindow::setShouldClose(bool flag) { glfwSetWindowShouldClose(window, fl
 void* GLFWWindow::nativeHandle() const { return static_cast<void*>(window); }
 
 void GLFWWindow::setSize(int width, int height) { glViewport(0, 0, width, height); }
+
+void GLFWWindow::beforeRender() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}

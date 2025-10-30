@@ -11,6 +11,7 @@ class Window {
   Window(glm::ivec2 size) : size(std::move(size)) {}
   virtual ~Window() = default;
   virtual void swapBuffers() = 0;
+  virtual void beforeRender() = 0;
   virtual double time() = 0;
 
   virtual bool isShouldClose() const = 0;

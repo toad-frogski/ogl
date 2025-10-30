@@ -59,7 +59,10 @@ void Engine::run() {
 
 void Engine::update() { screen->update(time.getDelta()); }
 
-void Engine::renderFrame() { screen->draw(time.getDelta()); }
+void Engine::renderFrame() {
+  window->beforeRender();
+  screen->draw(time.getDelta());
+}
 
 void Engine::postUpdate() {}
 

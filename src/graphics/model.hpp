@@ -15,10 +15,11 @@ class Model {
 
   void setTransform(const glm::mat4& t) { transform = t; }
 
-  void draw(const glm::mat4& viewProj) const {
+  void draw(const glm::mat4& view, const glm::mat4& projection) const {
     shader->use();
-    glm::mat4 mvp = viewProj * transform;
-    shader->setUniform("mvp", mvp);
+    shader->setUniform("model", transform);
+    shader->setUniform("view", view);
+    shader->setUniform("projection", projection);
     mesh->draw();
   }
 };

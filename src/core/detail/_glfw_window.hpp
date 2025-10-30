@@ -18,6 +18,7 @@ class GLFWWindow : public Window {
   ~GLFWWindow();
   double time() override;
   void swapBuffers() override;
+  void beforeRender() override;
   bool isShouldClose() const override;
   void setShouldClose(bool flag) override;
   void setSize(int width, int height) override;
