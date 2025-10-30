@@ -60,4 +60,10 @@ class Shader {
   }
 
   void setUniform(const std::string& name, float value) { glUniform1f(getUniformLocation(name), value); }
+
+  void setUniform(const std::string& name, int type) { glUniform1i(getUniformLocation(name), type); }
+
+  void setUniform(const std::string& name, glm::vec3 value) {
+    glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
+  }
 };

@@ -5,10 +5,9 @@ void MainScreen::update(double delta) {}
 
 void MainScreen::draw(double delta) {
   auto camera = Engine::getInstance().getCamera();
-  glm::mat4 view = camera->getViewMatrix();
-  glm::mat4 projection = camera->getProjectionMatrix();
+  if (!camera) return;
 
   for (const auto& model : models) {
-    model->draw(view, projection);
+    model->draw(*camera, lights);
   }
 }
