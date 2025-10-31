@@ -15,14 +15,14 @@ void sandbox() {
                                          utils::loadResourse("./res/shaders/base_frag.glsl").c_str());
 
   auto cube = std::make_shared<Cube>(glm::vec3{0.0f, 0.0f, 0.0f}, 0.5f, shader);
-  auto dirLight =
-      std::make_shared<Light>(Light{LightType::Directional, glm::vec3(0.0f, -3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f),
+  auto spotLightTop =
+      std::make_shared<Light>(Light{LightType::Point, glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -2.0f, 0.0f),
                                     glm::vec3(1.0f, 1.0f, 1.0f), 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f});
-  auto spotLight = std::make_shared<Light>(
-      Light{LightType::Spot, glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(-2.0f, -2.0f, -2.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+  auto pointLightFront = std::make_shared<Light>(
+      Light{LightType::Spot, glm::vec3(-2.0f, -2.0f, -2.0f), glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(1.0f, 1.0f, 1.0f),
             1.0f, 1.0f, 0.09f, 0.032f, glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(17.5f))});
 
-  screen->lights.push_back(dirLight);
-  screen->lights.push_back(spotLight);
+  screen->lights.push_back(spotLightTop);
+  screen->lights.push_back(pointLightFront);
   screen->models.push_back(cube);
 }

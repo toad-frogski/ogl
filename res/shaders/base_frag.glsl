@@ -25,7 +25,7 @@ out vec4 FragColor;
 
 void main() {
   vec3 norm = normalize(Normal);
-  vec3 result = vec3(0.0);
+  vec3 result = 0.2 * vec3(1.0);
 
   for (int i = 0; i < numLights; i++) {
     vec3 lightDir;

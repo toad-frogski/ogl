@@ -39,8 +39,13 @@ std::unique_ptr<Window> Window::initialize(DisplaySettings* settings, std::strin
 
   glViewport(0, 0, width, height);
   glClearColor(0.0f, 0.0f, 0.0f, 1);
+
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
+
   glfwSwapInterval(1);
 
   glm::vec2 scale;
@@ -61,6 +66,4 @@ void* GLFWWindow::nativeHandle() const { return static_cast<void*>(window); }
 
 void GLFWWindow::setSize(int width, int height) { glViewport(0, 0, width, height); }
 
-void GLFWWindow::beforeRender() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
+void GLFWWindow::beforeRender() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
